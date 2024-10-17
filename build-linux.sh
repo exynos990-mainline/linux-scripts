@@ -49,7 +49,7 @@ uni_config_fixup()
 {
 	if ! grep -q "RAMDISK_ENTRY" configs/${DEVICE}_defconfig; then
 		echo "FIXUP: uniLoader ramdisk entry address"
-		echo "CONFIG_RAMDISK_ENTRY=0x82000000" >> configs/${DEVICE}_defconfig
+		echo "CONFIG_RAMDISK_ENTRY=0x84000000" >> configs/${DEVICE}_defconfig
 	fi
 }
 
