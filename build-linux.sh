@@ -6,6 +6,7 @@ dt_add_ramdisk()
 {
 	cp ${KERNEL_TREE}/arch/arm64/boot/dts/exynos/exynos990-${DEVICE}.dts bak.dts
 	sed '/\	chosen {/a\
+		bootargs = "root=/dev/mem0 initrd=0x84000000,0x1000000";\
 		linux,initrd-start = <0x84000000>;\
 		linux,initrd-end = <0x84FFFFFF>;' bak.dts | tee ${KERNEL_TREE}/arch/arm64/boot/dts/exynos/exynos990-${DEVICE}.dts
 }
@@ -34,6 +35,10 @@ prepare_build_uni()
 {
 	cp ${KERNEL_TREE}/arch/arm64/boot/Image ${UNILOADER_TREE}/blob/Image
 	cp ${KERNEL_TREE}/arch/arm64/boot/dts/exynos/exynos990-${DEVICE}.dtb ${UNILOADER_TREE}/blob/dtb
+
+	if [ -f ${RAMDISK_BLOB} ]; then
+		cp ${RAMDISK_BLOB} ${UNILOADER_TREE}/blob/ramdisk
+	fi
 	cd ${UNILOADER_TREE}
 
 	# uniLoader lore
@@ -110,6 +115,7 @@ echo "ROOT: ${ROOT}"
 echo "KERNEL_TREE: ${KERNEL_TREE}"
 echo "UNILOADER_TREE: ${UNILOADER_TREE}"
 echo "DEVICE: ${DEVICE}"
+echo "RAMDISK_BLOB: ${RAMDISK_BLOB}"
 
 _DEVICE=${DEVICE}
 build_linux
